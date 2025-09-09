@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control - Green Mantenimientos & Servicios Ambientales SAS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-50: #f0fdf4;
+            --primary-100: #dcfce7;
+            --primary-200: #bbf7d0;
+            --primary-300: #86efac;
+            --primary-400: #4ade80;
+            --primary-500: #22c55e;
+            --primary-600: #16a34a;
+            --primary-700: #15803d;
+            --primary-800: #166534;
+            --primary-900: #14532d;
+            --white: #ffffff;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --dark-bg: #121212;
+            --dark-secondary: #1e1e1e;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --sidebar-width: 280px;
+        }
+
+        body {
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.6;
+            font-weight: 400;
+            transition: var(--transition);
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Modo oscuro */
+        .dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--gray-200);
+        }
+
+        .dark-mode .card,
+        .dark-mode .dashboard-card,
+        .dark-mode .dropdown-menu,
+        .dark-mode .top-navbar,
+        .dark-mode .sidebar,
+        .dark-mode .search-input {
+            background-color: var(--dark-secondary);
+            border-color: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dark-mode .text-muted {
+            color: var(--gray-400) !important;
+        }
+
+        .dark-mode .sidebar-brand,
+        .dark-mode .dashboard-card-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .sidebar-brand span {
+            color: var(--primary-400);
+        }
+
+        .dark-mode .sidebar-item {
+            color: var(--gray-300);
+        }
+
+        .dark-mode .sidebar-item:hover {
+            background-color: rgba(34, 197, 94, 0.1);
+        }
+
+        .dark-mode .sidebar-item.active {
+            background-color: rgba(34, 197, 94, 0.2);
+            color: var(--primary-400);
+        }
+
+        .dark-mode .sidebar-shortcut {
+            background-color: rgba(34, 197, 94, 0.3);
+            color: var(--primary-300);
+        }
+
+        .dark-mode .submenu-item {
+            color: var(--gray-400);
+        }
+
+        .dark-mode .submenu-item:hover {
+            background-color: rgba(34, 197, 94, 0.1);
+            color: var(--primary-300);
+        }
+
+        .dark-mode .theme-toggle {
+            color: var(--gray-300);
+        }
+
+        .dark-mode .theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Estilos principales */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--white);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-brand {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .sidebar-brand img {
+            height: 50px;
+            margin-right: 12px;
+        }
+
+        .sidebar-brand span {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary-700);
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-item,
+        .submenu-item {
+            padding: 0.75rem 1.5rem;
+            margin: 0.25rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            color: var(--gray-600);
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .sidebar-item i {
+            margin-right: 12px;
+        }
+
+        .sidebar-item.active {
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+            font-weight: 500;
+        }
+
+        .sidebar-shortcut {
+            margin-left: auto;
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .submenu {
+            padding-left: 2.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .submenu.show {
+            max-height: 500px;
+        }
+
+        .submenu-item {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .submenu-item i {
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        .chevron-icon {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-item.active .chevron-icon {
+            transform: rotate(90deg);
+        }
+
+        .main-content {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            padding: 2rem;
+            transition: var(--transition);
+        }
+
+        .top-navbar {
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .search-container {
+            position: relative;
+            width: 350px;
+        }
+
+        .search-input {
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem 0.75rem 3rem;
+            border: 1px solid var(--gray-200);
+            background-color: var(--white);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+
+        .search-input:focus {
+            box-shadow: var(--shadow-md);
+            border-color: var(--primary-400);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-500);
+            font-size: 1.1rem;
+        }
+
+        .user-section,
+        .notification-section {
+            display: none;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--gray-600);
+            font-size: 1.25rem;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-left: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+            transform: rotate(30deg);
+        }
+
+        .dashboard-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .dashboard-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-5px);
+        }
+
+        .dashboard-card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+        }
+
+        .dashboard-card-header i {
+            font-size: 1.5rem;
+            color: var(--primary-500);
+            margin-right: 1rem;
+        }
+
+        .dashboard-card-body {
+            padding: 1.5rem;
+        }
+
+        .dashboard-card-body p {
+            text-align: justify;
+        }
+
+        .shortcut-combo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .shortcut-key {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+            padding: 0 8px;
+            background-color: var(--primary-500);
+            color: white;
+            border-radius: 6px;
+            margin: 0 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .shortcut-label {
+            margin-left: 1rem;
+            font-weight: 500;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .requirement-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .requirement-table th,
+        .requirement-table td {
+            padding: 0.75rem;
+            border: 1px solid var(--gray-200);
+            text-align: left;
+        }
+
+        .requirement-table th {
+            background-color: var(--primary-100);
+            font-weight: 600;
+        }
+
+        .requirement-table tr:nth-child(even) {
+            background-color: var(--gray-50);
+        }
+
+        .dark-mode .requirement-table th {
+            background-color: var(--primary-800);
+        }
+
+        .dark-mode .requirement-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .user-story-card {
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-500);
+        }
+
+        .user-story-card .card-header {
+            background-color: var(--primary-100);
+            font-weight: 600;
+        }
+
+        .dark-mode .user-story-card .card-header {
+            background-color: var(--primary-800);
+            color: var(--gray-100);
+        }
+
+        .business-rule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .business-rule-table th,
+        .business-rule-table td {
+            padding: 0.5rem;
+            border: 1px solid var(--gray-200);
+            text-align: left;
+        }
+
+        .business-rule-table th {
+            background-color: var(--primary-100);
+            font-weight: 600;
+        }
+
+        .business-rule-table tr:nth-child(even) {
+            background-color: var(--gray-50);
+        }
+
+        .dark-mode .business-rule-table th {
+            background-color: var(--primary-800);
+        }
+
+        .dark-mode .business-rule-table tr:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .search-container {
+                width: 100%;
+                margin: 1rem 0;
+            }
+
+            .requirement-table {
+                font-size: 0.8rem;
+            }
+
+            .business-rule-table {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="sidebar-brand">
+            <img src="../iconos/log.jpg" alt="Logo Green Mantenimientos & Servicios Ambientales SAS">
+            <span>Green Mantenimientos & Servicios Ambientales SAS</span>
+        </div>
+        <div class="sidebar-menu">
+            <a href="#" class="sidebar-item active" data-target="introduccion">
+                <i class="bi bi-house-door"></i>
+                <span>Introducción</span>
+            </a>
+            <a href="#" class="sidebar-item" data-target="justificacion">
+                <i class="bi bi-file-text"></i>
+                <span>Justificación del Proyecto</span>
+            </a>
+            <a href="#" class="sidebar-item" data-target="problema">
+                <i class="bi bi-question-circle"></i>
+                <span>Definición del Problema</span>
+            </a>
+            <a href="#" class="sidebar-item" data-target="objetivos">
+                <i class="bi bi-bullseye"></i>
+                <span>Objetivos</span>
+            </a>
+            <a href="#" class="sidebar-item" data-target="alcance">
+                <i class="bi bi-boundary"></i>
+                <span>Alcance del Sistema</span>
+            </a>
+            <div class="sidebar-item" id="requisitosMenu" aria-expanded="false" role="button">
+                <i class="bi bi-list-check"></i>
+                <span>Requisitos</span>
+                <span class="sidebar-shortcut">Ctrl+R</span>
+                <i class="bi bi-chevron-right chevron-icon"></i>
+            </div>
+            <div class="submenu" id="requisitosSubmenu">
+                <a href="#" class="submenu-item" data-target="req-usuario">
+                    <i class="bi bi-person-circle"></i>
+                    <span>Requisitos de Usuario</span>
+                </a>
+                <a href="#" class="submenu-item" data-target="req-funcionales">
+                    <i class="bi bi-gear"></i>
+                    <span>Requisitos Funcionales</span>
+                </a>
+                <a href="#" class="submenu-item" data-target="req-no-funcionales">
+                    <i class="bi bi-shield"></i>
+                    <span>Requisitos No Funcionales</span>
+                </a>
+                <a href="#" class="submenu-item" data-target="historias-usuario">
+                    <i class="bi bi-card-text"></i>
+                    <span>Historias de Usuario</span>
+                </a>
+                <a href="#" class="submenu-item" data-target="reglas-negocio">
+                    <i class="bi bi-building"></i>
+                    <span>Reglas del Negocio</span>
+                </a>
+            </div>
+            <div class="sidebar-divider"></div>
+            <a href="#" class="sidebar-item" id="toggleThemeBtn">
+                <i class="bi bi-moon"></i>
+                <span>Modo Oscuro</span>
+                <span class="sidebar-shortcut">Ctrl+T</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="top-navbar">
+            <button class="btn btn-outline-secondary d-lg-none" id="sidebarToggle" aria-label="Toggle navigation">
+                <i class="bi bi-list"></i>
+            </button>
+            <div class="search-container d-none d-lg-block">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" class="form-control search-input" id="globalSearch" placeholder="Buscar (Ctrl+B)"
+                    aria-label="Buscar">
+            </div>
+            <div class="d-flex align-items-center">
+                <div class="notification-section">
+                    <a href="#" class="nav-link position-relative me-3">
+                        <i class="bi bi-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </a>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                    <i class="bi bi-sun"></i>
+                </button>
+                <div class="user-section">
+                    <div class="dropdown">
+                        <div class="user-profile dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <div class="user-avatar">U</div>
+                            <span class="d-none d-md-inline">Usuario</span>
+                        </div>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i> Mi perfil</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-key me-2"></i> Cambiar contraseña</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="../index.php"><i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid mt-4">
+            <div id="introduccion" class="content-section active">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-lightbulb"></i>
+                        <h5 class="mb-0">Introducción - Gestión de Sistemas Sépticos y Trampas de Grasa</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>En el contexto de la gestión ambiental, los pozos sépticos y las trampas de grasa juegan un papel fundamental en el tratamiento y manejo adecuado de las aguas residuales, tanto en zonas urbanas como rurales. Estas infraestructuras no solo permiten una disposición más controlada de los desechos, sino que también son esenciales para prevenir la contaminación del suelo y de las fuentes de agua. Sin embargo, cuando no se les da el mantenimiento adecuado, pueden convertirse en focos graves de contaminación y de problemas de salud pública.</p>
+                        
+                        <h6>Pozos Sépticos</h6>
+                        <p>Los pozos sépticos son sistemas subterráneos de tratamiento de aguas residuales domésticas que se utilizan principalmente en áreas donde no hay acceso a redes de alcantarillado. Su función principal es separar los sólidos de los líquidos en las aguas residuales, permitiendo que el líquido filtrado se disperse de manera segura en el suelo a través de un sistema de drenaje.</p>
+                        
+                        <h6>Trampas de Grasa</h6>
+                        <p>Las trampas de grasa son dispositivos diseñados para interceptar aceites y grasas de las aguas residuales antes de que lleguen al sistema de alcantarillado. Estos se utilizan comúnmente en cocinas comerciales y restaurantes, donde grandes cantidades de grasa se desechan regularmente. Las grasas y aceites son extremadamente difíciles de descomponer de manera natural y, si no son retenidos adecuadamente, pueden solidificarse y obstruir las tuberías, generando problemas en el sistema de alcantarillado y aumentando el riesgo de contaminación.</p>
+                        <p>Las normas ambientales sugieren que las trampas de grasa deben limpiarse cada 1 a 3 meses, y los pozos sépticos de 1 a 2 años dependiendo de su uso y capacidad, para garantizar un correcto funcionamiento y evitar la liberación de contaminantes.</p>
+                        
+                        <h6>Impacto Ambiental y Contaminación</h6>
+                        <p>La falta de mantenimiento adecuado en pozos sépticos y trampas de grasa puede tener graves consecuencias ambientales. Los sistemas sépticos fallidos son una fuente común de contaminación de aguas subterráneas, liberando nitrógeno, fósforo, bacterias y virus al medio ambiente. Esto puede llevar a la eutrofización de lagos y ríos, lo que genera la proliferación de algas tóxicas que reducen los niveles de oxígeno en el agua, afectando gravemente a la fauna acuática.</p>
+                        
+                        <h6>Regulaciones y Normativas</h6>
+                        <p>Muchos países han implementado estrictas normativas para el mantenimiento de pozos sépticos y trampas de grasa, con el fin de mitigar su impacto ambiental. En Colombia, la Resolución 0631 de 2015 establece los parámetros de vertimientos para fuentes superficiales, subterráneas y redes de alcantarillado, aplicando estándares que obligan a las empresas a realizar mantenimientos regulares. A nivel global, existen normativas similares que obligan a propietarios y operadores de sistemas sépticos y trampas de grasa a cumplir con los plazos de mantenimiento estipulados, y a garantizar que no se afecte la calidad del agua.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="justificacion" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-file-text"></i>
+                        <h5 class="mb-0">Justificación del Proyecto</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>En Green Mantenimientos & Servicios Ambientales SAS, se presentan inconvenientes recurrentes en la gestión de pedidos entre los clientes y los asesores comerciales debido al actual sistema de solicitud de servicios, que se realiza principalmente a través de WhatsApp y llamadas telefónicas.</p>
+                        
+                        <p>Esta modalidad ha generado confusiones tanto en la recepción como en la interpretación de la información proporcionada por los clientes, ya que muchas veces no se comunica de manera clara los detalles del servicio requerido. Por otro lado, los asesores comerciales tampoco siempre logran obtener información precisa, lo que resulta en errores, reprocesos y falta de organización en la gestión de los pedidos.</p>
+                        
+                        <p>Esta situación impacta negativamente en la eficiencia operativa de la empresa, retrasando los tiempos de respuesta, causando insatisfacción entre los clientes y afectando la calidad del servicio. Además, al no contar con un sistema centralizado y automatizado para la recepción y gestión de solicitudes, el control de los pedidos y la información relevante sobre los servicios solicitados no se encuentra adecuadamente organizada ni disponible en tiempo real para los distintos departamentos de la empresa.</p>
+                        
+                        <p>Por estas razones, se requiere implementar un software que permita automatizar el proceso de solicitud de servicios a través de una plataforma web, donde los clientes puedan realizar sus pedidos de manera más estructurada y clara. Este sistema centralizado facilitará el seguimiento de los servicios solicitados, mejorará la comunicación entre los clientes y la empresa, y optimizará la organización interna para garantizar una gestión más eficiente y sin errores.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="problema" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-question-circle"></i>
+                        <h5 class="mb-0">Definición del Problema</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>Green Mantenimientos & Servicios Ambientales SAS enfrenta dificultades significativas en la gestión de pedidos debido a la falta de claridad en la comunicación entre los clientes y los asesores comerciales. El uso de WhatsApp y llamadas telefónicas como principal medio para solicitar servicios ha generado confusiones y errores en la interpretación de la información, afectando directamente la eficiencia operativa y la calidad del servicio ofrecido. Esta problemática se manifiesta en múltiples dimensiones que requieren una solución integral y tecnológicamente avanzada.</p>
+                        
+                        <p>En primer lugar, la comunicación a través de mensajes de texto y llamadas telefónicas carece de estructuración, lo que conduce a la omisión de datos críticos necesarios para la correcta prestación del servicio. Los clientes, al no contar con un formato estandarizado, suelen proporcionar información incompleta o ambigua sobre sus necesidades, lo que deriva en malentendidos y en la asignación incorrecta de recursos. Por otro lado, los asesores comerciales, al depender de la comunicación verbal o escrita informal, enfrentan desafíos para capturar y documentar de manera precisa los requerimientos específicos de cada cliente, aumentando la probabilidad de errores en la planificación y ejecución de los servicios.</p>
+                        
+                        <p>Adicionalmente, la falta de un sistema centralizado para la gestión de solicitudes impide el seguimiento adecuado de cada pedido, generando retrasos en los tiempos de respuesta y afectando la satisfacción del cliente. La información relevante se encuentra dispersa en diferentes canales de comunicación, lo que dificulta su acceso y consolidación para el análisis y la toma de decisiones. Esta fragmentación de datos también obstaculiza la coordinación entre los distintos departamentos de la empresa, como operaciones, finanzas y comercial, resultando en una gestión fragmentada y poco eficiente.</p>
+                        
+                        <p>Otro aspecto crítico es la incapacidad para mantener un historial completo y accesible de las interacciones con los clientes y los servicios prestados. Sin un registro centralizado, resulta complicado realizar seguimientos posteriores, analizar tendencias de demanda o identificar oportunidades de mejora en los procesos. Esta carencia limita la capacidad de la empresa para aprender de experiencias pasadas y optimizar sus operaciones de manera continua, perpetuando ineficiencias y afectando su competitividad en el mercado.</p>
+                        
+                        <p>Finalmente, la dependencia de procesos manuales y comunicaciones informales incrementa el riesgo de errores humanos, como la pérdida de información, la duplicación de esfuerzos o la omisión de pasos críticos en la cadena de valor. Estos errores no solo impactan la eficiencia operativa, sino que también pueden tener consecuencias financieras significativas, como costos adicionales por reprocesos, sanciones por incumplimiento de plazos o daños a la reputación de la empresa por la insatisfacción de los clientes. Por lo tanto, la implementación de un sistema integrado de gestión se vuelve imperativa para abordar estas problemáticas de manera holística y sostenible.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="objetivos" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-bullseye"></i>
+                        <h5 class="mb-0">Objetivos</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <h6>Objetivo General</h6>
+                        <p>Desarrollar un sistema informático que facilite el control eficiente y manejo de los pedidos, instalaciones y revisión de sistemas sépticos en la empresa "Green Mantenimientos & Servicios Ambientales" integrando la gestión de información de clientes y empleados mediante el uso de bases de datos y I.A para que mejore la organización, trazabilidad y satisfacción del cliente.</p>
+                        
+                        <h6>Objetivos Específicos</h6>
+                        <ol>
+                            <li>Levantar los requerimientos del sistema a través de entrevistas y encuestas a gerentes, técnicos, empleados y clientes, con el fin de identificar los puntos críticos en la gestión de los servicios de mantenimiento e instalación de sistemas sépticos.</li>
+                            <li>Analizar la información recopilada mediante el uso de diagramas de casos de uso y flujo de procesos, para identificar los principales flujos de trabajo que optimicen la gestión de pedidos, mantenimientos y revisiones de pozos sépticos y trampas de grasa.</li>
+                            <li>Diseñar la arquitectura del sistema informático utilizando herramientas UML, diagramas de flujo de datos y otros modelos que representen los procesos operativos de la empresa, garantizando la integración eficiente de las áreas de operaciones, finanzas y comercial.</li>
+                            <li>Codificar los módulos del sistema, incluyendo la gestión de pedidos, instalaciones, mantenimiento de sistemas sépticos, control de inventarios y facturación, empleando lenguajes de programación como Python, Java y tecnologías de bases de datos como MySQL.</li>
+                            <li>Realizar pruebas funcionales e integrales en el sistema, simulando situaciones reales de mantenimiento, instalación y revisión de sistemas sépticos, para asegurar que cada módulo opere de manera correcta, eficiente y segura.</li>
+                            <li>Documentar el sistema mediante manuales técnicos y de usuario, que sirvan como guía para el correcto uso y mantenimiento del software por parte del personal operativo y administrativo de la empresa.</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="alcance" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-boundary"></i>
+                        <h5 class="mb-0">Alcance del Sistema</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>Según Metaute (2015): Las EPS son fundamentales para entender el sistema, que datos e información ingresará, los procesos que se realizarán en el sistema, y que informes y consultas saldrán como respuesta al usuario.</p>
+                        
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>Entradas</th>
+                                    <th>Procesos</th>
+                                    <th>Salidas</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Gestión Tipo de Servicio</td>
+                                    <td rowspan="17">Registro y Actualización: Registro, clasificación y actualización de tipos de datos (clientes, productos, servicios, proveedores).</td>
+                                    <td>Informe de servicios ejecutados</td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Cliente</td>
+                                    <td>Informe de clientes</td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Tipo de Sistema</td>
+                                    <td>Informe de inventario y productos</td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Estado del Sistema</td>
+                                    <td>Consulta de clientes registrados</td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Proveedor</td>
+                                    <td>Consulta de servicios solicitados</td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Motivo del Servicio</td>
+                                    <td>Consulta de proveedores activos</td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Sede</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Registro de Servicio</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Reporte Mantenimiento</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Cotización</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Empleado</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Tipo Empleado</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Tipo Pago</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Factura</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Pago</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Tipo Producto</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Producto</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Gestión Ubicación</td>
+                                    <td>Monitoreo y Seguimiento: Monitoreo del estado de sistemas y servicios, seguimiento de solicitudes de servicio.</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>Generación de Documentos: Creación de cotizaciones, reportes y facturas según las necesidades de los clientes.</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="req-usuario" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-person-circle"></i>
+                        <h5 class="mb-0">Requisitos de Usuario</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>Según Metaute (2015) explica que el Requisito de Usuario (RU) representa la necesidad del cliente para automatizar un grupo de datos, convirtiéndose en un requisito del sistema. Describe las acciones que el usuario puede realizar y, mediante distintas herramientas, se va afinando para integrarse en otros procesos.</p>
+                        
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>Id Requisito</th>
+                                    <th>Nombre del Requisito</th>
+                                    <th>Descripción del Requisito</th>
+                                    <th>Usuario</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RU-001</td>
+                                    <td>Gestión Tipo de Servicio</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los tipos de servicio.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-002</td>
+                                    <td>Gestión Cliente</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los datos de los clientes.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-003</td>
+                                    <td>Gestión Tipo de Sistema</td>
+                                    <td>El sistema permitirá crear, modificar, consultar and eliminar los tipos de sistema.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-004</td>
+                                    <td>Gestión Estado del Sistema</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar el estado del sistema.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-005</td>
+                                    <td>Gestión Proveedor</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los datos de los proveedores.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-006</td>
+                                    <td>Gestión Motivo del Servicio</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los motivos del servicio.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-007</td>
+                                    <td>Gestión Sede</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar las sedes.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-008</td>
+                                    <td>Gestión Registro de Servicio</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los registros de servicio.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-009</td>
+                                    <td>Gestión Reporte Mantenimiento</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los reportes de mantenimiento.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-010</td>
+                                    <td>Gestión Cotización</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar las cotizaciones.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-011</td>
+                                    <td>Gestión Empleado</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los datos de los empleados.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-012</td>
+                                    <td>Gestión Tipo Empleado</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los tipos de empleados.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-013</td>
+                                    <td>Gestión Tipo Pago</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los tipos de pago.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-014</td>
+                                    <td>Gestión Factura</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar las facturas.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-015</td>
+                                    <td>Gestión Pago</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los pagos.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-016</td>
+                                    <td>Gestión Tipo Producto</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los tipos de productos.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-017</td>
+                                    <td>Gestión Producto</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar los productos.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-018</td>
+                                    <td>Gestión Ubicación</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar las ubicaciones.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-019</td>
+                                    <td>Gestión Informes</td>
+                                    <td>El sistema generará informes de servicios ejecutados, clientes y el inventario de productos.</td>
+                                    <td>Administrador, Técnico</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-020</td>
+                                    <td>Gestión Consultas</td>
+                                    <td>El sistema permitirá consultar clientes registrados, servicios solicitados y proveedores activos.</td>
+                                    <td>Cliente, Técnico, Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-021</td>
+                                    <td>Gestión administración perfil</td>
+                                    <td>El sistema debe permitir la gestión de la información del tipo de contaminante, de tal forma que se puedan crear, modificar, Eliminar, consultar, guardar, cancelar y salir.</td>
+                                    <td>Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-022</td>
+                                    <td>Gestión administración usuario</td>
+                                    <td>El sistema debe permitir la gestión de la administración de perfil, de tal forma que se puedan crear, modificar, Eliminar, consultar, guardar, cancelar y salir.</td>
+                                    <td>Administrador</td>
+                                </tr>
+                                <tr>
+                                    <td>RU-023</td>
+                                    <td>Gestión De notificaciones</td>
+                                    <td>El sistema permitirá crear, modificar, consultar y eliminar notificaciones solo para administradores. Los clientes solo podrán consultar, guardar y salir.</td>
+                                    <td>Administrador, Cliente</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="req-funcionales" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-gear"></i>
+                        <h5 class="mb-0">Requisitos Funcionales</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>Según Metaute (2015) dice que un Requisito Funcional (RF) detalla el Requisito de Usuario (RU), ampliando su descripción en los diagramas de casos de uso y relacionando a cada usuario que ejecutará acciones en el sistema. Cada RF tiene un número único y está asociado a un RU.</p>
+                        
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>Id Requisito</th>
+                                    <th>Nombre del Requisito</th>
+                                    <th>Descripción del Requisito</th>
+                                    <th>Usuario</th>
+                                    <th>Id RU</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                        <td>RF-001</td>
+                                        <td>Crear Tipo De Servicio</td>
+                                        <td>Permite crear nuevos tipos de servicio con los siguientes datos: CodTS, DescripciónTS.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-002</td>
+                                        <td>Modificar Tipo De Servicio</td>
+                                        <td>Permite modificar la información de un tipo de servicio a excepción de su código, asegurando la actualización de datos.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-003</td>
+                                        <td>Consultar Tipo De Servicio</td>
+                                        <td>Permite consultar los tipos de servicio registrados en el sistema para seleccionar el adecuado según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-004</td>
+                                        <td>Eliminar Tipo De Servicio</td>
+                                        <td>Permite eliminar tipos de servicio, manteniendo una base de datos organizada y actualizada. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-005</td>
+                                        <td>Cancelar tipo de servicio</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-006</td>
+                                        <td>Guardar Tipo De Servicio</td>
+                                        <td>Permite guardar los cambios realizados en la información de tipo de servicio o cuando se cree un tipo de servicio nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-007</td>
+                                        <td>Salir De Tipo De Servicio</td>
+                                        <td>Permite salir de la ventana de tipo de servicio.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-008</td>
+                                        <td>Crear Cliente</td>
+                                        <td>Permite registrar nuevos clientes en el sistema con los siguientes datos: (IdCliente, Nombre1, Nombre2, Apellido1, Apellido2, Teléfono, Correo).</td>
+                                        <td>Técnico, Administrador</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-009</td>
+                                        <td>Modificar Cliente</td>
+                                        <td>Permite modificar los datos de los clientes registrados a excepción de su id.</td>
+                                        <td>Técnico, Administrador</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-010</td>
+                                        <td>Consultar Cliente</td>
+                                        <td>Permite consultar la información de los clientes registrados. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-011</td>
+                                        <td>Eliminar Cliente</td>
+                                        <td>Permite eliminar la información de un cliente registrado, garantizando la privacidad de datos. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-012</td>
+                                        <td>Cancelar cliente</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-013</td>
+                                        <td>Guardar Cliente</td>
+                                        <td>Permite guardar los cambios realizados en la información del cliente o cuando se cree un cliente nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-014</td>
+                                        <td>Salir De Cliente</td>
+                                        <td>Permite salir de la ventana de clientes.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-002</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-015</td>
+                                        <td>Crear Tipo De Sistema</td>
+                                        <td>Permite crear nuevos tipos de sistemas sépticos con estos datos: (CodTipoSist, DescripciónSist).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-016</td>
+                                        <td>Modificar Tipo De Sistema</td>
+                                        <td>Permite editar los datos de un tipo de sistema registrado a excepción del código.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-017</td>
+                                        <td>Consultar Tipo De Sistema</td>
+                                        <td>Permite consultar los tipos de sistema disponibles para seleccionar el adecuado. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-018</td>
+                                        <td>Eliminar Tipo De Sistema</td>
+                                        <td>Permite eliminar tipos de sistema, manteniendo la organización del sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-019</td>
+                                        <td>Cancelar tipo de sistema</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-020</td>
+                                        <td>Guardar Tipo De Sistema</td>
+                                        <td>Permite guardar los cambios realizados en la información de tipo de sistema o cuando se cree un tipo de sistema nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-021</td>
+                                        <td>Salir De Tipo De Sistema</td>
+                                        <td>Permite salir de la ventana de tipo de sistema.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-003</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-022</td>
+                                        <td>Crear Estado Del Sistema</td>
+                                        <td>Permite crear nuevos estados para los sistemas con los siguientes datos: CodSist, Capacidad, Estado, Año de Instalación, NroSerie), facilitando el control de estado de cada uno.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-023</td>
+                                        <td>Modificar Estado Del Sistema</td>
+                                        <td>Permite modificar los estados del sistema para actualizar la información en función de los cambios necesarios a excepción de su código.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-024</td>
+                                        <td>Consultar Estado Del Sistema</td>
+                                        <td>Permite verificar el estado actual de los sistemas, brindando visibilidad sobre su funcionamiento. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-025</td>
+                                        <td>Eliminar Estado Del Sistema</td>
+                                        <td>Permite eliminar estados del sistema, asegurando una base de datos actualizada y relevante. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-026</td>
+                                        <td>Guardar Estado Del Sistema</td>
+                                        <td>Permite guardar los cambios realizados en la información de estado del sistema o cuando se cree un estado del sistema nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-027</td>
+                                        <td>Cancelar estado del sistema</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-028</td>
+                                        <td>Salir De Estado Del Sistema</td>
+                                        <td>Permite salir de la ventana de estado del sistema.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-004</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-029</td>
+                                        <td>Crear Proveedor</td>
+                                        <td>Permite registrar nuevos proveedores en el sistema con los siguientes datos: (CodProv, NombreProv, Teléfono, Correo, Dirección), facilitando la gestión de proveedores.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-030</td>
+                                        <td>Modificar Proveedor</td>
+                                        <td>Permite editar la información de los proveedores, asegurando que los datos sean precisos a excepción de su id.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-031</td>
+                                        <td>Consultar Proveedor</td>
+                                        <td>Permite acceder a la información de los proveedores registrados en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-032</td>
+                                        <td>Eliminar Proveedor</td>
+                                        <td>Permite al administrador eliminar proveedores del sistema para mantener la base de datos organizada. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-033</td>
+                                        <td>Guardar Proveedor</td>
+                                        <td>Permite guardar los cambios realizados en la información de proveedor o cuando se cree un proveedor nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-034</td>
+                                        <td>Cancelar proveedor</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-035</td>
+                                        <td>Salir De Proveedor</td>
+                                        <td>Permite salir de la ventana de proveedor.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-005</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-036</td>
+                                        <td>Crear Motivo Del Servicio</td>
+                                        <td>Permite al administrador crear nuevos motivos de servicio con los siguientes datos: (CodMot, DescripciónMot).</td>
+                                        <td>Administrador</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-037</td>
+                                        <td>Modificar Motivo Del Servicio</td>
+                                        <td>Permite modificar los motivos de servicio registrados en el sistema a excepción de su código.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-038</td>
+                                        <td>Consultar Motivo Del Servicio</td>
+                                        <td>Permite consultar los motivos de servicio disponibles en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-039</td>
+                                        <td>Eliminar Motivo Del Servicio</td>
+                                        <td>Permite eliminar motivos de servicio del sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-040</td>
+                                        <td>Guardar Motivo Del Servicio</td>
+                                        <td>Permite guardar los cambios realizados en la información de motivo del servicio o cuando se cree un motivo del servicio nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-041</td>
+                                        <td>Cancelar Motivo del servicio</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-042</td>
+                                        <td>Salir De Motivo Del Servicio</td>
+                                        <td>Permite salir de la ventana de motivo del servicio.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-006</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-043</td>
+                                        <td>Crear Sede</td>
+                                        <td>Permite registrar nuevas sedes en el sistema con los siguientes datos: (CodSede, NombreSede, Dirección, Teléfono), facilitando la organización geográfica de servicios.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-044</td>
+                                        <td>Modificar Sede</td>
+                                        <td>Permite actualizar la información de una sede registrada en el sistema a excepción de su código.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-045</td>
+                                        <td>Consultar Sede</td>
+                                        <td>Permite visualizar la información de las sedes registradas en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-046</td>
+                                        <td>Eliminar Sede</td>
+                                        <td>Permite eliminar la información de una sede registrada en el sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-047</td>
+                                        <td>Cancelar sede</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-048</td>
+                                        <td>Guardar Sede</td>
+                                        <td>Permite guardar los cambios realizados en la información de sede o cuando se cree una sede nueva o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-049</td>
+                                        <td>Salir De Sede</td>
+                                        <td>Permite salir de la ventana de sede.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-007</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-050</td>
+                                        <td>Crear Registro De Servicio</td>
+                                        <td>Permite registrar nuevos servicios en el sistema con los siguientes datos: (CodReg, FechaHora, DescripciónServicio, TipoRegistro), asegurando un control adecuado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-051</td>
+                                        <td>Modificar Registro De Servicio</td>
+                                        <td>Permite editar los registros de servicio a excepción de su código, asegurando que la información esté actualizada.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-052</td>
+                                        <td>Consultar Registro De Servicio</td>
+                                        <td>Permite consultar los registros de servicio existentes. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-053</td>
+                                        <td>Eliminar Registro De Servicio</td>
+                                        <td>Permite eliminar registros de servicios del sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-054</td>
+                                        <td>Guardar Registro De Servicio</td>
+                                        <td>Permite guardar los cambios realizados en la información de registro de servicio o cuando se cree un registro de servicio nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-055</td>
+                                        <td>Cancelar registro de servicio</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-056</td>
+                                        <td>Salir De Registro De Servicio</td>
+                                        <td>Permite salir de la ventana de registro de servicio.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-008</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-057</td>
+                                        <td>Crear Reporte De Mantenimiento</td>
+                                        <td>Permite generar nuevos reportes de mantenimiento con los siguientes datos: (CodRep, Fecha, DescripciónRep, Resultado).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-058</td>
+                                        <td>Modificar Reporte De Mantenimiento</td>
+                                        <td>Permite modificar los reportes de mantenimiento para asegurar la precisión de los datos a excepción de su código.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-059</td>
+                                        <td>Consultar Reporte De Mantenimiento</td>
+                                        <td>Permite consultar los reportes de mantenimiento generados. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-060</td>
+                                        <td>Eliminar Reporte De Mantenimiento</td>
+                                        <td>Permite eliminar reportes de mantenimiento obsoletos o incorrectos. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-061</td>
+                                        <td>Guardar Reporte De Mantenimiento</td>
+                                        <td>Permite guardar los cambios realizados en la información de reporte de mantenimiento o cuando se cree un reporte de mantenimiento nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-062</td>
+                                        <td>Cancelar reporte de mantenimiento</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-063</td>
+                                        <td>Salir De Reporte De Mantenimiento</td>
+                                        <td>Permite salir de la ventana de reporte de mantenimiento.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-009</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-064</td>
+                                        <td>Crear Cotización</td>
+                                        <td>Permite registrar nuevas cotizaciones en el sistema con los siguientes datos: (CodCot, Fecha, DescripciónCot, Monto).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-065</td>
+                                        <td>Modificar Cotización</td>
+                                        <td>Permite actualizar las cotizaciones registradas en el sistema a excepción de su código.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-066</td>
+                                        <td>Consultar Cotización</td>
+                                        <td>Permite visualizar las cotizaciones registradas para servicios futuros. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-067</td>
+                                        <td>Eliminar Cotización</td>
+                                        <td>Permite eliminar cotizaciones desactualizadas del sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-068</td>
+                                        <td>Guardar Cotización</td>
+                                        <td>Permite guardar los cambios realizados en la información de Cotización o cuando se cree una Cotización nueva o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-069</td>
+                                        <td>Cancelar cotización</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-070</td>
+                                        <td>Salir De Cotización</td>
+                                        <td>Permite salir de la ventana de Cotización.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-010</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-071</td>
+                                        <td>Crear Empleado</td>
+                                        <td>Permite registrar empleados en el sistema con los siguientes datos: IdEmpleado, Nombre1, Nombre2, Apellido1, Apellido2, Teléfono).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-072</td>
+                                        <td>Modificar Empleado</td>
+                                        <td>Permite actualizar la información de los empleados registrados en el sistema a excepción de su id.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-073</td>
+                                        <td>Consultar Empleado</td>
+                                        <td>Permite acceder a la información de empleados registrados en el sistema. Según su debido id.</td>
+                                        <td>Técnico, Administrador, Cliente</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-074</td>
+                                        <td>Eliminar Empleado</td>
+                                        <td>Permite eliminar registros de empleados obsoletos o incorrectos del sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-075</td>
+                                        <td>Guardar Empleado</td>
+                                        <td>Permite guardar los cambios realizados en la información de Empleado o cuando se cree un empleado nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-076</td>
+                                        <td>Cancelar empleado</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-077</td>
+                                        <td>Salir De Empleado</td>
+                                        <td>Permite salir de la ventana de Empleado.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-011</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-078</td>
+                                        <td>Crear Tipo De Empleado</td>
+                                        <td>Permite crear tipos de empleado en el sistema para clasificar al personal con los siguientes datos: (CodTipoEmp, DescripciónTipoEmp).</td>
+                                        <td>Administrador</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-079</td>
+                                        <td>Modificar Tipo De Empleado</td>
+                                        <td>Permite modificar la clasificación de tipos de empleado a excepción de su código.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-080</td>
+                                        <td>Consultar Tipo De Empleado</td>
+                                        <td>Permite consultar los tipos de empleado registrados en el sistema. Según su debido id.</td>
+                                        <td>Técnico, Administrador, Cliente</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-081</td>
+                                        <td>Eliminar Tipo De Empleado</td>
+                                        <td>Permite eliminar clasificaciones de tipos de empleado no necesarias. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-082</td>
+                                        <td>Guardar Tipo De Empleado</td>
+                                        <td>Permite guardar los cambios realizados en la información de tipo de empleado o cuando se cree un tipo de empleado nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-083</td>
+                                        <td>Cancelar tipo de empleado</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-084</td>
+                                        <td>Salir De Tipo De Empleado</td>
+                                        <td>Permite salir de la ventana de tipo de empleado.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-085</td>
+                                        <td>Crear Tipo De Pago</td>
+                                        <td>Permite crear nuevos tipos de pago en el sistema con los siguientes datos: CodTipoPago, DescripciónTipoPago).</td>
+                                        <td>Administrador</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-086</td>
+                                        <td>Modificar Tipo De Pago</td>
+                                        <td>Permite modificar los tipos de pago registrados a excepción de su código.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-087</td>
+                                        <td>Consultar Tipo De Pago</td>
+                                        <td>Permite consultar los tipos de pago disponibles. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-088</td>
+                                        <td>Eliminar Tipo De Pago</td>
+                                        <td>Permite eliminar tipos de pago no necesarios. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-089</td>
+                                        <td>Guardar Tipo De Pago</td>
+                                        <td>Permite guardar los cambios realizados en la información de tipo de pago o cuando se cree un tipo de pago nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-090</td>
+                                        <td>Cancelar tipo de pago</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-091</td>
+                                        <td>Salir De Tipo De Pago</td>
+                                        <td>Permite salir de la ventana de tipo de pago.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-013</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-092</td>
+                                        <td>Crear Factura</td>
+                                        <td>Permite crear nuevas facturas en el sistema para los servicios realizados con los siguientes datos: (CodFact, FechaFact, MontoFact, IdCliente, CodTS).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-093</td>
+                                        <td>Modificar Factura</td>
+                                        <td>Permite actualizar los datos de una factura generada previamente a excepción de su codigo.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-094</td>
+                                        <td>Consultar Factura</td>
+                                        <td>Permite consultar las facturas generadas en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-095</td>
+                                        <td>Eliminar Factura</td>
+                                        <td>Permite eliminar facturas que no sean necesarias en el sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-096</td>
+                                        <td>Guardar Factura</td>
+                                        <td>Permite guardar los cambios realizados en la información de factura o cuando se cree una factura nueva o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-097</td>
+                                        <td>Cancelar factura</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-098</td>
+                                        <td>Salir De Factura</td>
+                                        <td>Permite salir de la ventana de factura.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-014</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-099</td>
+                                        <td>Crear Pago</td>
+                                        <td>Permite registrar pagos en el sistema con los siguientes datos: CodPago, FechaPago, MontoPago, IdCliente, CodFact).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-100</td>
+                                        <td>Modificar Pago</td>
+                                        <td>Permite modificar los datos de pagos registrados en el sistema a excepción de su codigo.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-101</td>
+                                        <td>Consultar Pago</td>
+                                        <td>Permite consultar los pagos registrados en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-102</td>
+                                        <td>Eliminar Pago</td>
+                                        <td>Permite eliminar pagos registrados en el sistema que no sean necesarios. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-103</td>
+                                        <td>Guardar Pago</td>
+                                        <td>Permite guardar los cambios realizados en la información de pago o cuando se cree un pago nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-104</td>
+                                        <td>Cancelar pago</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-105</td>
+                                        <td>Salir De Pago</td>
+                                        <td>Permite salir de la ventana de pago.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-015</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-106</td>
+                                        <td>Crear Tipo De Producto</td>
+                                        <td>Permite crear tipos de producto en el sistema con los siguientes datos: (CodTipoProd, DescripciónTipoProd).</td>
+                                        <td>Administrador</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-107</td>
+                                        <td>Modificar Tipo De Producto</td>
+                                        <td>Permite actualizar los datos de los tipos de producto registrados a excepción de su codigo.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-108</td>
+                                        <td>Consultar Tipo De Producto</td>
+                                        <td>Permite consultar los tipos de producto en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-109</td>
+                                        <td>Eliminar Tipo De Producto</td>
+                                        <td>Permite eliminar tipos de producto no necesarios en el sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-110</td>
+                                        <td>Guardar Tipo De Producto</td>
+                                        <td>Permite guardar los cambios realizados en la información de tipo de producto o cuando se cree un tipo de producto nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-111</td>
+                                        <td>Cancelar tipo de producto</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-112</td>
+                                        <td>Salir De Tipo De Producto</td>
+                                        <td>Permite salir de la ventana de tipo de producto.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-016</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-113</td>
+                                        <td>Crear Producto</td>
+                                        <td>Permite crear productos en el sistema para su gestión con los siguientes datos: CodProd, NombreProd, CantidadProd, PrecioProd, CodTipoProd).</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-114</td>
+                                        <td>Modificar Producto</td>
+                                        <td>Permite modificar los datos de los productos registrados a excepción de su codigo.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-115</td>
+                                        <td>Consultar Producto</td>
+                                        <td>Permite consultar los productos disponibles en el sistema. Según su debido id.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-116</td>
+                                        <td>Eliminar Producto</td>
+                                        <td>Permite eliminar productos del sistema que no sean necesarios. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-117</td>
+                                        <td>Guardar Producto</td>
+                                        <td>Permite guardar los cambios realizados en la información de producto o cuando se cree un producto nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-118</td>
+                                        <td>Cancelar producto</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-119</td>
+                                        <td>Salir De Producto</td>
+                                        <td>Permite salir de la ventana de producto.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-017</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-120</td>
+                                        <td>Crear Ubicación</td>
+                                        <td>Permite crear nuevas ubicaciones en el sistema con los siguientes datos: CodUbic, Dirección, Ciudad, Departamento).</td>
+                                        <td>Administrador</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-121</td>
+                                        <td>Modificar Ubicación</td>
+                                        <td>Permite actualizar la información de las ubicaciones registradas a excepción de su codigo.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-122</td>
+                                        <td>Consultar Ubicación</td>
+                                        <td>Permite consultar las ubicaciones registradas en el sistema. Según su debido id.</td>
+                                        <td>Técnico, Administrador, Cliente</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-123</td>
+                                        <td>Eliminar Ubicación</td>
+                                        <td>Permite eliminar ubicaciones que ya no sean necesarias en el sistema. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-124</td>
+                                        <td>Guardar Ubicación</td>
+                                        <td>Permite guardar los cambios realizados en la información de Ubicación o cuando se cree una ubicación nueva o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-125</td>
+                                        <td>Cancelar ubicación</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-126</td>
+                                        <td>Salir De Ubicación</td>
+                                        <td>Permite salir de la ventana de ubicación.</td>
+                                        <td>Cliente, Técnico, Administrador</td>
+                                        <td>RU-018</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-127</td>
+                                        <td>Generar Informe De Servicios</td>
+                                        <td>Permite generar informes de los servicios ejecutados.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-019</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-128</td>
+                                        <td>Generar Informe de Clientes</td>
+                                        <td>Permite generar informes sobre los clientes registrados en el sistema.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-019</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-129</td>
+                                        <td>Generar Informe de Inventario</td>
+                                        <td>Permite generar informes sobre el inventario de productos en el sistema.</td>
+                                        <td>Administrador, Técnico</td>
+                                        <td>RU-019</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-130</td>
+                                        <td>Consultar Clientes Registrados</td>
+                                        <td>Permite consultar los clientes registrados en el sistema.</td>
+                                        <td>Cliente, Administrador</td>
+                                        <td>RU-020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-131</td>
+                                        <td>Consultar Servicios Solicitados</td>
+                                        <td>Permite consultar los servicios solicitados en el sistema.</td>
+                                        <td>Técnico, Administrador</td>
+                                        <td>RU-020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-132</td>
+                                        <td>Consultar Proveedores Activos</td>
+                                        <td>Permite consultar los proveedores activos registrados en el sistema.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-020</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-133</td>
+                                        <td>Crear Administración perfil</td>
+                                        <td>Permite registrar la administración de perfil.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-134</td>
+                                        <td>Consultar Administración perfil</td>
+                                        <td>Permite consultar la información de la administración de perfil por medio del id_administrador_perfil.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-135</td>
+                                        <td>Modificar Administración perfil</td>
+                                        <td>Permite modificar la información de la administración de perfil.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-136</td>
+                                        <td>Guardar Administración perfil</td>
+                                        <td>Permite guardar los cambios realizados en la información de administración perfil o cuando se cree una administración de perfil nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-137</td>
+                                        <td>Eliminar Administración perfil</td>
+                                        <td>Permite eliminar la administración de perfil. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-138</td>
+                                        <td>Cancelar Administración perfil</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-139</td>
+                                        <td>Salir Administración perfil</td>
+                                        <td>Permite salir de la ventana administración perfil.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-140</td>
+                                        <td>Crear Administración usuario</td>
+                                        <td>Permite registrar la administración de usuario.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-141</td>
+                                        <td>Consultar Administración usuario</td>
+                                        <td>Permite consultar la información de la administración de usuario por medio del id_administracion_usuario.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-142</td>
+                                        <td>Modificar Administración usuario</td>
+                                        <td>Permite modificar la información de la administración de usuario.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-143</td>
+                                        <td>Guardar Administración usuario</td>
+                                        <td>Permite guardar los cambios realizados en la información de administración usuario o cuando se cree una administración de usuario nuevo o se haya hecho un cambio en el estado.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-144</td>
+                                        <td>Eliminar Administración usuario</td>
+                                        <td>Permite eliminar la administración de usuario. Validando que si se pueda eliminar.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-145</td>
+                                        <td>Cancelar Administración usuario</td>
+                                        <td>Permite cancelar el proceso de crear.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-146</td>
+                                        <td>Salir Administración usuario</td>
+                                        <td>Permite salir de la ventana administración usuario.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-022</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-147</td>
+                                        <td>Crear Notificación</td>
+                                        <td>Permite crear nuevas notificaciones ingresando datos como tipo, destinatario, mensaje, fecha y prioridad.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-148</td>
+                                        <td>Modificar Notificación</td>
+                                        <td>Permite modificar el contenido de una notificación existente.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-149</td>
+                                        <td>Consultar Notificación</td>
+                                        <td>Permite visualizar las notificaciones enviadas y recibidas.</td>
+                                        <td>Administrador, Cliente</td>
+                                        <td>RU-023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-150</td>
+                                        <td>Eliminar Notificación</td>
+                                        <td>Permite eliminar notificaciones obsoletas o incorrectas.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-151</td>
+                                        <td>Guardar Notificación</td>
+                                        <td>Permite guardar los cambios realizados en una notificación nueva o editada.</td>
+                                        <td>Administrador, Cliente</td>
+                                        <td>RU-023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-152</td>
+                                        <td>Cancelar Notificación</td>
+                                        <td>Permite cancelar la creación o modificación de una notificación.</td>
+                                        <td>Administrador</td>
+                                        <td>RU-023</td>
+                                    </tr>
+                                    <tr>
+                                        <td>RF-153</td>
+                                        <td>Salir de Notificaciones</td>
+                                        <td>Permite salir de la ventana de gestión de notificaciones.</td>
+                                        <td>Administrador, Cliente</td>
+                                        <td>RU-023</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="req-no-funcionales" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-shield"></i>
+                        <h5 class="mb-0">Requisitos No Funcionales</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <p>Según Metaute (2015): "El requisito no funcional, está relacionado con todo aquello que no solicita directamente el cliente, en relación a lo que debe llevar o cumplir el sistema. Los RNF, tienen que ver con características externas de calidad". (p.87).</p>
+                        
+                        <h6>Facilidad de uso ("usability")</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del Requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Publicidad</td>
+                                    <td>Antes de intensificar el uso del sistema los usuarios deben conocer su modo de uso.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Actualización de información</td>
+                                    <td>Actualizar la información por ingreso o retiro de algún trabajador.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-003</td>
+                                    <td>Diseño adecuado</td>
+                                    <td>Diseño adecuado a las necesidades del usuario, para que la aplicación sea intuitiva y sencilla de uso cumpliendo con los siguientes parámetros: Tendrá una interfaz atrayente: formación de los elementos acorde al diseño. La carga de información deberá ser rápida.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h6>Confiabilidad</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Disponibilidad</td>
+                                    <td>El sistema debe estar disponible las 24 horas del día.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Actualización de base de datos</td>
+                                    <td>Debe asegurar la permanente actualización de la base de datos, cuando se registre la información.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h6>Ambiente de trabajo "Performance"</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Tiempo de respuesta</td>
+                                    <td>Tiempo de respuesta: se espera minimizar el tiempo a un promedio de 15 segundos, con el fin de que no se haga muy pesada la interacción con la Base de Datos manejada vía web.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Espacio de base de datos</td>
+                                    <td>Asignar suficiente espacio a la base de datos para soportar las grandes cantidades de información suministradas.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-003</td>
+                                    <td>Configuración del equipo</td>
+                                    <td>Configuración adecuada del equipo, para soportar la correcta instalación de la aplicación.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                       <h6>Restricciones de Diseño</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Crear Tipo De Servicio</td>
+                                    <td>El lenguaje de programación del sistema se espera implementar en Java.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Modificar Tipo De Servicio</td>
+                                    <td>Se requiere de licenciamiento para el desarrollo del software.  </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        <h6>Seguridad</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Encriptación</td>
+                                    <td>Encriptación de las claves (Las contraseñas de los usuarios deben ser almacenadas encriptadas usando un algoritmo de reducción criptográfica).</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Backup</td>
+                                    <td>Realizar un backup de estos datos en disco o cinta para disponer de un nivel adicional de protección de la información.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-003</td>
+                                    <td>Auditoría</td>
+                                    <td>Todas las operaciones de consulta y modificación de los datos de los perfiles, usuarios y maestros principales deben ser auditadas.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                                            <h6>Documentación de usuario y sistemas de ayuda.</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Disponibilidad</td>
+                                    <td>Capacitación a los usuarios del sistema, con el fin de lograr un buen manejo del mismo.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Actualización de base de datos</td>
+                                    <td>Manuales de usuario.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                                                <h6>Interfaz de Usuario</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Crear Tipo De Servicio</td>
+                                    <td>Será manejado a través de un computador de escritorio.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Modificar Tipo De Servicio</td>
+                                    <td>Los colores de la aplicación serán gris oscuro, azul claro y blanco.  </td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-003</td>
+                                    <td>Consultar Tipo De Servicio</td>
+                                    <td>El texto será manejado en color negro, la fuente de la letra será arial tamaño 11.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                                                <h6>Interfaces de comunicación</h6>
+                        <table class="requirement-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Requisito</th>
+                                    <th>Descripción del requisito</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RNF-001</td>
+                                    <td>Disponibilidad</td>
+                                    <td>El acceso al software será vía web, debe asegurarse la estabilidad y seguridad de la conexión.</td>
+                                </tr>
+                                <tr>
+                                    <td>RNF-002</td>
+                                    <td>Actualización de base de datos</td>
+                                    <td>Comunicación con la interfaz de usuario.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            
+<div id="historias-usuario" class="content-section">
+    <div class="dashboard-card fade-in-up">
+        <div class="dashboard-card-header">
+            <i class="bi bi-card-text"></i>
+            <h5 class="mb-0">Historias de Usuario</h5>
+        </div>
+        <div class="dashboard-card-body">
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-001: Solicitud de mantenimiento</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Pedir un servicio de mantenimiento</p>
+                    <p><strong>Para:</strong> Agendar la revisión del sistema séptico</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-002: Seguimiento de solicitud</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Mirar en qué va la solicitud del servicio</p>
+                    <p><strong>Para:</strong> Saber cuándo le van a hacer el mantenimiento</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-003: Pago en línea</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Pagar en línea</p>
+                    <p><strong>Para:</strong> No tener enredos con los pagos</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-004: Aprobación de solicitudes</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Decidir si aprueba o no las solicitudes de servicio</p>
+                    <p><strong>Para:</strong> Organizar bien el trabajo de los técnicos</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-005: Gestión de precios</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Poner los precios de los servicios</p>
+                    <p><strong>Para:</strong> Que los precios estén siempre actualizados</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-006: Agenda de servicios</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Técnico</p>
+                    <p><strong>Quiero:</strong> Revisar la agenda de servicios</p>
+                    <p><strong>Para:</strong> Tener claro a dónde tiene que ir y a qué hora</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-007: Finalización de servicio</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Técnico</p>
+                    <p><strong>Quiero:</strong> Marcar un servicio como terminado</p>
+                    <p><strong>Para:</strong> Mostrar que el trabajo quedó hecho</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-008: Generación de facturas</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Generar las facturas para los clientes</p>
+                    <p><strong>Para:</strong> Que los pagos queden en orden</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-009: Descarga de facturas</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Descargar la factura de un servicio</p>
+                    <p><strong>Para:</strong> Tener un comprobante por si se necesita</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-010: Notificaciones de pago</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Recibir avisos de pagos pendientes</p>
+                    <p><strong>Para:</strong> Evitar que le cobren de más o que le corten el servicio</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-011: Historial de servicios</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Revisar el historial de servicios</p>
+                    <p><strong>Para:</strong> Saber cuándo fue el último mantenimiento y qué le hicieron</p>
+                </div>
+            </div>
+
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-012: Registro de clientes</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Registrar nuevos clientes</p>
+                    <p><strong>Para:</strong> Que más personas puedan pedir servicios</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-013: Actualización de datos personales</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Cambiar datos personales en el sistema</p>
+                    <p><strong>Para:</strong> Mantener su información al día por si lo necesitan contactar</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-014: Asignación de técnicos</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Asignar técnicos a los servicios pedidos</p>
+                    <p><strong>Para:</strong> Repartir el trabajo de manera justa</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-015: Visualización de detalles de servicios</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Técnico</p>
+                    <p><strong>Quiero:</strong> Ver detalles de los servicios</p>
+                    <p><strong>Para:</strong> Tener la información clara antes de ir a hacer el trabajo</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-016: Calificación de servicio</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Ponerle calificación al servicio recibido</p>
+                    <p><strong>Para:</strong> Opinar sobre cómo le fue con el técnico</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-017: Generación de reportes</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Hacer reportes de los servicios realizados</p>
+                    <p><strong>Para:</strong> Ver qué tan bien está funcionando el equipo</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-018: Solicitud de reembolso</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Pedir la plata de vuelta si no le hicieron el servicio</p>
+                    <p><strong>Para:</strong> No perder la plata en caso de problemas</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-019: Gestión de permisos</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Administrador</p>
+                    <p><strong>Quiero:</strong> Decidir quién entra y qué puede hacer en el sistema</p>
+                    <p><strong>Para:</strong> Que clientes, técnicos y administradores tengan lo que necesitan</p>
+                </div>
+            </div>
+            
+            <div class="card user-story-card mb-3">
+                <div class="card-header">HU-020: Contacto con soporte técnico</div>
+                <div class="card-body">
+                    <p><strong>Como:</strong> Cliente</p>
+                    <p><strong>Quiero:</strong> Escribirle al soporte técnico por la plataforma</p>
+                    <p><strong>Para:</strong> Resolver dudas o problemas con el sistema</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+            
+            <div id="reglas-negocio" class="content-section">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-building"></i>
+                        <h5 class="mb-0">Reglas del Negocio</h5>
+                    </div>
+                    <div class="dashboard-card-body">
+                        <table class="business-rule-table">
+                            <thead>
+                                <tr>
+                                    <th>Identificador</th>
+                                    <th>Nombre de la regla</th>
+                                    <th>Descripción</th>
+                                    <th>Ámbito</th>
+                                    <th>Condiciones</th>
+                                    <th>Acciones o restricciones</th>
+                                    <th>Excepciones</th>
+                                    <th>Prioridad</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>RN-001</td>
+                                    <td>Disponibilidad garantizada de técnicos</td>
+                                    <td>La empresa debe contar siempre con un equipo de técnicos suficiente para atender la demanda de servicios.</td>
+                                    <td>Planificación de recursos</td>
+                                    <td>Se debe verificar la disponibilidad de técnicos antes de asignar un servicio.</td>
+                                    <td>No se podrá confirmar un servicio si no hay técnicos disponibles.</td>
+                                    <td>No aplica.</td>
+                                    <td>Alta</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-002</td>
+                                    <td>Límite de solicitudes activas por cliente</td>
+                                    <td>Un cliente no puede tener más de 3 servicios en proceso simultáneamente.</td>
+                                    <td>Política comercial</td>
+                                    <td>Se revisa la cantidad de servicios en estado "pendiente".</td>
+                                    <td>Si un cliente alcanza el límite, no podrá pedir más hasta que finalice uno.</td>
+                                    <td>Clientes con acuerdos comerciales activos pueden exceder el límite.</td>
+                                    <td>Media</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-003</td>
+                                    <td>Política de pago y acceso a servicios</td>
+                                    <td>Los clientes con pagos pendientes no podrán solicitar nuevos servicios hasta saldar su deuda.</td>
+                                    <td>Finanzas y cobranzas</td>
+                                    <td>Se verifica el estado de cuenta antes de aceptar un nuevo servicio.</td>
+                                    <td>Si hay pagos vencidos, se bloquea la solicitud.</td>
+                                    <td>No aplica para clientes con acuerdos de pago aprobados por administración.</td>
+                                    <td>Alta</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-004</td>
+                                    <td>Registro de servicios realizados</td>
+                                    <td>Todos los servicios deben documentarse con evidencias fotográficas y comentarios de los técnicos.</td>
+                                    <td>Calidad y auditoría</td>
+                                    <td>Se exige el registro de evidencia antes de cerrar el servicio.</td>
+                                    <td>No se podrá finalizar un servicio sin este requisito.</td>
+                                    <td>No aplica si el servicio fue cancelado antes de su ejecución.</td>
+                                    <td>Alta</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-005</td>
+                                    <td>Implementación del "Plan Vecino"</td>
+                                    <td>Si un cliente coordina el servicio de varios vecinos en la misma jornada, recibe un descuento en su factura.</td>
+                                    <td>Estrategia comercial</td>
+                                    <td>Debe haber al menos 3 servicios programados en la misma área y fecha.</td>
+                                    <td>Se aplicará un descuento progresivo en función del número de servicios.</td>
+                                    <td>No aplica si los vecinos cancelan o no cumplen los términos.</td>
+                                    <td>Alta</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-006</td>
+                                    <td>Beneficios para clientes antiguos</td>
+                                    <td>Clientes con más de 3 años de antigüedad recibirán descuentos o productos adicionales sin costo.</td>
+                                    <td>Fidelización de clientes</td>
+                                    <td>Se debe verificar la antigüedad del cliente en el sistema.</td>
+                                    <td>Se ofrecerán descuentos en mantenimiento o productos ecológicos.</td>
+                                    <td>No aplica si el cliente tiene historial de pagos pendientes.</td>
+                                    <td>Media</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-007</td>
+                                    <td>Asignación de técnicos según competencias</td>
+                                    <td>Los técnicos deben ser asignados a los servicios según su especialidad para garantizar calidad en la ejecución.</td>
+                                    <td>Gestión del talento</td>
+                                    <td>Se revisa la base de datos de técnicos antes de asignar un servicio.</td>
+                                    <td>Solo se permite la asignación a técnicos con certificación en el área requerida.</td>
+                                    <td>No aplica si no hay disponibilidad inmediata de técnicos especializados.</td>
+                                    <td>Alta</td>
+                                </tr>
+                                <tr>
+                                    <td>RN-010</td>
+                                    <td>Validación y aprobación de presupuestos</td>
+                                    <td>Ningún servicio se iniciará sin la aprobación previa del cliente sobre el presupuesto.</td>
+                                    <td>Política de contratación</td>
+                                    <td>El cliente debe aceptar el presupuesto antes de agendar el servicio.</td>
+                                    <td>No se puede proceder sin aceptación del cliente.</td>
+                                    <td>No aplica para clientes con acuerdos comerciales preaprobados.</td>
+                                    <td>Alta</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const sidebarItems = document.querySelectorAll('.sidebar-item:not(#toggleThemeBtn), .submenu-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            const requisitosMenu = document.getElementById('requisitosMenu');
+            const requisitosSubmenu = document.getElementById('requisitosSubmenu');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const themeToggleBtn = document.getElementById('toggleThemeBtn');
+            const themeToggleIcon = document.getElementById('themeToggle').querySelector('i');
+            const userThemeToggleBtn = document.getElementById('themeToggle');
+
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                enableDarkMode();
+            } else {
+                disableDarkMode();
+            }
+
+            function enableDarkMode() {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                if (themeToggleIcon) {
+                    themeToggleIcon.classList.remove('bi-sun');
+                    themeToggleIcon.classList.add('bi-moon');
+                }
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = '<i class="bi bi-sun"></i> Modo Claro <span class="sidebar-shortcut">Ctrl+T</span>';
+                }
+            }
+
+            function disableDarkMode() {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+                if (themeToggleIcon) {
+                    themeToggleIcon.classList.remove('bi-moon');
+                    themeToggleIcon.classList.add('bi-sun');
+                }
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = '<i class="bi bi-moon"></i> Modo Oscuro <span class="sidebar-shortcut">Ctrl+T</span>';
+                }
+            }
+
+            function toggleTheme() {
+                if (body.classList.contains('dark-mode')) {
+                    disableDarkMode();
+                } else {
+                    enableDarkMode();
+                }
+            }
+
+            if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+            if (userThemeToggleBtn) userThemeToggleBtn.addEventListener('click', toggleTheme);
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (item.id === 'requisitosMenu') {
+                        return;
+                    }
+                    e.preventDefault();
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const targetId = item.getAttribute('data-target');
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            if (requisitosMenu) {
+                requisitosMenu.addEventListener('click', () => {
+                    requisitosMenu.classList.toggle('active');
+                    requisitosSubmenu.classList.toggle('show');
+                    const isExpanded = requisitosMenu.classList.contains('active');
+                    requisitosMenu.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey) {
+                    switch (e.key.toLowerCase()) {
+                        case 'r':
+                            e.preventDefault();
+                            if (requisitosMenu) requisitosMenu.click();
+                            break;
+                        case 't':
+                            e.preventDefault();
+                            toggleTheme();
+                            break;
+                        case 'b':
+                            e.preventDefault();
+                            const searchInput = document.getElementById('globalSearch');
+                            if (searchInput) searchInput.focus();
+                            break;
+                        case 'u':
+                            e.preventDefault();
+                            const reqUser = document.querySelector('[data-target="req-usuario"]');
+                            if (reqUser) reqUser.click();
+                            break;
+                        case 'f':
+                            e.preventDefault();
+                            const reqFunc = document.querySelector('[data-target="req-funcionales"]');
+                            if (reqFunc) reqFunc.click();
+                            break;
+                        case 'n':
+                            e.preventDefault();
+                            const reqNoFunc = document.querySelector('[data-target="req-no-funcionales"]');
+                            if (reqNoFunc) reqNoFunc.click();
+                            break;
+                        case 'h':
+                            e.preventDefault();
+                            const histUser = document.querySelector('[data-target="historias-usuario"]');
+                            if (histUser) histUser.click();
+                            break;
+                        case 'g':
+                            e.preventDefault();
+                            const regNeg = document.querySelector('[data-target="reglas-negocio"]');
+                            if (regNeg) regNeg.click();
+                            break;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
