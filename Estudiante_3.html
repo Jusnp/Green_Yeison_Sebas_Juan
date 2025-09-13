@@ -325,6 +325,15 @@
             overflow: hidden;
         }
 
+        /* Visibilidad de secciones de contenido */
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
         .dark-mode .dashboard-card {
             background: var(--dark-secondary);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -435,7 +444,7 @@
                 <span>Análisis de Riesgos</span>
                 <span class="sidebar-shortcut">Ctrl+R</span>
             </a>
-            
+
             <div class="sidebar-submenu">
                 <a href="#" class="sidebar-item">
                     <i class="bi bi-cpu"></i>
@@ -468,17 +477,12 @@
                 <span>Estándares y Modelos para Pruebas de Software</span>
                 <span class="sidebar-shortcut">Ctrl+S</span>
             </a>
-            
-            <div class="sidebar-submenu">
-                <a href="#" class="sidebar-item">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span>IEEE 829 / ISO/IEC/IEEE 29119-3</span>
-                </a>
-                <a href="#" class="sidebar-item">
-                    <i class="bi bi-file-earmark-ruled"></i>
-                    <span>ISO/IEC/IEEE 29119</span>
-                </a>
-            </div>
+
+
+            <a href="#" class="sidebar-item" data-target="link">
+                <i class=" bi bi-file-earmark-text"></i>
+                <span>IEEE 829 / ISO/IEC/IEEE 29119-3</span>
+            </a>
 
             <!-- Tipos de Pruebas de Software -->
             <a href="#" class="sidebar-item">
@@ -486,7 +490,7 @@
                 <span>Tipos de Pruebas de Software</span>
                 <span class="sidebar-shortcut">Ctrl+T</span>
             </a>
-            
+
             <div class="sidebar-submenu">
                 <a href="#" class="sidebar-item">
                     <i class="bi bi-target"></i>
@@ -538,130 +542,145 @@
             </div>
         </div>
 
+
         <!-- Dashboard Content -->
-        <div class="dashboard-card fade-in-up">
-            <div class="dashboard-card-header">
-                <i class="bi bi-keyboard"></i>
-                <h5 class="mb-0">Atajos de teclado</h5>
-            </div>
-            <div class="dashboard-card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">B</span>
-                            <span class="shortcut-label">Buscar en el sistema</span>
-                        </div>
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">M</span>
-                            <span class="shortcut-label">Métricas y Valoración</span>
-                        </div>
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">C</span>
-                            <span class="shortcut-label">Cronograma</span>
-                        </div>
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">R</span>
-                            <span class="shortcut-label">Análisis de Riesgos</span>
-                        </div>
+        <div class="container-fluid mt-4">
+            <div id="link" class="content-section active">
+                <div class="dashboard-card fade-in-up">
+                    <div class="dashboard-card-header">
+                        <i class="bi bi-link-45deg"></i>
+                        <h5 class="mb-0">Link</h5>
                     </div>
-                    <div class="col-md-6">
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">E</span>
-                            <span class="shortcut-label">Estándares de Calidad</span>
-                        </div>
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">S</span>
-                            <span class="shortcut-label">Estándares de Pruebas</span>
-                        </div>
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">T</span>
-                            <span class="shortcut-label">Tipos de Pruebas</span>
-                        </div>
-                        <div class="shortcut-combo">
-                            <span class="shortcut-key">Ctrl</span>
-                            <span class="shortcut-key">D</span>
-                            <span class="shortcut-label">Cambiar tema</span>
-                        </div>
+                    <div class="dashboard-card-body">
+                        <a href="https://drive.google.com/drive/folders/1S5V9R5XYT2JZEllP5vCqOHVOplfqBCpI?usp=drive_link"
+                            style="color: BLACK;">LINK DEL DRIVE</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Theme toggle functionality
-        const toggleThemeBtn = document.getElementById('toggleThemeBtn');
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        const icon = themeToggle.querySelector('i');
+        document.addEventListener('DOMContentLoaded', () => {
+            const body = document.body;
+            const sidebarItems = document.querySelectorAll('.sidebar-item:not(#toggleThemeBtn), .submenu-item');
+            const contentSections = document.querySelectorAll('.content-section');
+            const requisitosMenu = document.getElementById('requisitosMenu');
+            const requisitosSubmenu = document.getElementById('requisitosSubmenu');
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            const sidebar = document.querySelector('.sidebar');
+            const themeToggleBtn = document.getElementById('toggleThemeBtn');
+            const themeToggleIcon = document.getElementById('themeToggle').querySelector('i');
+            const userThemeToggleBtn = document.getElementById('themeToggle');
 
-        // Check for saved theme preference
-        if (localStorage.getItem('theme') === 'dark') {
-            enableDarkMode();
-        }
-
-        if (toggleThemeBtn) toggleThemeBtn.addEventListener('click', toggleTheme);
-        if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
-
-        function toggleTheme() {
-            if (body.classList.contains('dark-mode')) {
-                disableDarkMode();
-            } else {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
                 enableDarkMode();
+            } else {
+                disableDarkMode();
             }
-        }
 
-        function enableDarkMode() {
-            body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
-            icon.classList.remove('bi-sun');
-            icon.classList.add('bi-moon');
-            if (toggleThemeBtn) {
-                toggleThemeBtn.innerHTML = '<i class="bi bi-sun"></i> Modo Claro <span class="sidebar-shortcut">Ctrl+D</span>';
-            }
-        }
-
-        function disableDarkMode() {
-            body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light');
-            icon.classList.remove('bi-moon');
-            icon.classList.add('bi-sun');
-            if (toggleThemeBtn) {
-                toggleThemeBtn.innerHTML = '<i class="bi bi-moon"></i> Modo Oscuro <span class="sidebar-shortcut">Ctrl+D</span>';
-            }
-        }
-
-        // Sidebar toggle for mobile
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            document.querySelector('.sidebar').classList.toggle('active');
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.ctrlKey) {
-                switch(e.key) {
-                    case 'b':
-                        e.preventDefault();
-                        document.getElementById('globalSearch').focus();
-                        break;
-                    case 'd':
-                        e.preventDefault();
-                        toggleTheme();
-                        break;
-                    case '/':
-                        e.preventDefault();
-                        // Show help modal or similar
-                        break;
+            function enableDarkMode() {
+                body.classList.add('dark-mode');
+                localStorage.setItem('theme', 'dark');
+                if (themeToggleIcon) {
+                    themeToggleIcon.classList.remove('bi-sun');
+                    themeToggleIcon.classList.add('bi-moon');
+                }
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = '<i class="bi bi-sun"></i> Modo Claro <span class="sidebar-shortcut">Ctrl+T</span>';
                 }
             }
+
+            function disableDarkMode() {
+                body.classList.remove('dark-mode');
+                localStorage.setItem('theme', 'light');
+                if (themeToggleIcon) {
+                    themeToggleIcon.classList.remove('bi-moon');
+                    themeToggleIcon.classList.add('bi-sun');
+                }
+                if (themeToggleBtn) {
+                    themeToggleBtn.innerHTML = '<i class="bi bi-moon"></i> Modo Oscuro <span class="sidebar-shortcut">Ctrl+T</span>';
+                }
+            }
+
+            function toggleTheme() {
+                if (body.classList.contains('dark-mode')) {
+                    disableDarkMode();
+                } else {
+                    enableDarkMode();
+                }
+            }
+
+            if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
+            if (userThemeToggleBtn) userThemeToggleBtn.addEventListener('click', toggleTheme);
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (item.id === 'requisitosMenu') {
+                        return;
+                    }
+                    e.preventDefault();
+                    sidebarItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    const targetId = item.getAttribute('data-target');
+                    contentSections.forEach(section => {
+                        if (section.id === targetId) {
+                            section.classList.add('active');
+                        } else {
+                            section.classList.remove('active');
+                        }
+                    });
+                });
+            });
+
+            // Sidebar toggle for mobile
+            document.getElementById('sidebarToggle').addEventListener('click', function () {
+                document.querySelector('.sidebar').classList.toggle('active');
+            });
+
+            if (requisitosMenu) {
+                requisitosMenu.addEventListener('click', () => {
+                    requisitosMenu.classList.toggle('active');
+                    requisitosSubmenu.classList.toggle('show');
+                    const isExpanded = requisitosMenu.classList.contains('active');
+                    requisitosMenu.setAttribute('aria-expanded', isExpanded);
+                });
+            }
+
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+            }
+
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey) {
+                    switch (e.key.toLowerCase()) {
+                        case 'r':
+                            e.preventDefault();
+                            if (requisitosMenu) requisitosMenu.click();
+                            break;
+                        case 't':
+                            e.preventDefault();
+                            toggleTheme();
+                            break;
+                        case 'b':
+                            e.preventDefault();
+                            const searchInput = document.getElementById('globalSearch');
+                            if (searchInput) searchInput.focus();
+                            break;
+                        case 'u':
+                            e.preventDefault();
+                            const reqUser = document.querySelector('[data-target="link"]');
+                            if (reqUser) reqUser.click();
+                            break;
+                    }
+                }
+            });
         });
     </script>
 </body>
