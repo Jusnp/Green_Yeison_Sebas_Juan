@@ -1,104 +1,108 @@
-**ADR-001: Identificación de atributos de calidad del sistema**
+# ADR-001: Aplicación de principios SOLID en el módulo de usuarios
 
-**Estado**
+## Estado
+
 Aceptado
 
-**Contexto**
-En el desarrollo del sistema Green, se requiere identificar los atributos de calidad que definirán el comportamiento no funcional del sistema.
+## Fecha
 
-Estos atributos se basan en el estándar ISO 25010, el cual establece características de calidad como rendimiento, seguridad, fiabilidad, usabilidad, mantenibilidad, compatibilidad, portabilidad y funcionalidad.
+2026-05-22
 
-El objetivo es traducir las necesidades del negocio en requisitos técnicos medibles, que permitan definir cómo debe comportarse el sistema en condiciones reales de operación.
+## Contexto
 
-**Decisión**
-Se identifican los siguientes atributos de calidad como relevantes para el sistema:
+El sistema de Green Mantenimientos & Servicios Ambientales necesita gestionar usuarios, roles, autenticación, validaciones, persistencia de datos y notificaciones. En una primera versión del diseño, estas responsabilidades podían quedar concentradas en una sola clase tipo `UserManager`, lo cual genera un problema arquitectónico porque una misma clase termina encargándose de varias tareas al mismo tiempo.
 
-- Rendimiento
-- Seguridad
-- Fiabilidad
-- Usabilidad
-- Mantenibilidad
-- Compatibilidad
+Este enfoque monolítico afecta directamente la mantenibilidad del sistema, ya que cualquier cambio en las reglas de validación, en la forma de guardar usuarios o en el envío de correos obligaría a modificar la misma clase. Esto aumenta el riesgo de errores, dificulta las pruebas y hace que el código sea más difícil de entender para el equipo.
 
-Cada atributo ha sido definido mediante escenarios de calidad medibles, permitiendo evaluar su cumplimiento de forma objetiva.
+El Laboratorio 6 de la Semana 7 solicita refactorizar este tipo de código aplicando principios SOLID, especialmente el principio de responsabilidad única, conocido como SRP, y el principio de inversión de dependencias, conocido como DIP. El objetivo es lograr alta cohesión y bajo acoplamiento dentro del sistema.
 
-**Atributos de Calidad y Escenarios**
+Además, el proyecto Green tiene como uno de sus atributos importantes la mantenibilidad, debido a que el sistema contiene varios módulos relacionados como usuarios, clientes, servicios, pagos, reportes, inventario y notificaciones. Por esta razón, el código debe organizarse de forma clara, modular y fácil de modificar.
 
-**1. Rendimiento**
+## Problema
 
-**Descripción:** El sistema debe garantizar tiempos de respuesta rápidos y estables ante múltiples solicitudes.
+El problema principal es que una clase monolítica encargada de gestionar usuarios puede mezclar varias responsabilidades, por ejemplo:
 
-**Escenario de calidad:** - Estímulo: 100 usuarios consultan simultáneamente el estado de sus servicios  
-- Sistema: Plataforma web  
-- Respuesta: El sistema responde sin degradación del servicio  
-- Medida: Tiempo promedio ≤ 2 segundos, máximo ≤ 3 segundos  
+- Validar los datos del usuario.
+- Guardar usuarios en la base de datos.
+- Buscar usuarios por correo electrónico.
+- Enviar correos de bienvenida o notificaciones.
+- Coordinar la lógica del registro de usuarios.
 
-**2. Seguridad**
+Cuando estas responsabilidades se mezclan, se violan principios importantes de diseño de software:
 
-**Descripción:** El sistema debe proteger la información mediante autenticación, autorización y cifrado.
+1. Se viola SRP porque la clase tiene más de una razón para cambiar.
+2. Se aumenta el acoplamiento porque la lógica de negocio depende directamente de detalles técnicos como la base de datos o el servicio de correo.
+3. Se dificulta el mantenimiento porque un cambio pequeño puede afectar varias partes del sistema.
+4. Se complica la realización de pruebas unitarias porque no es fácil reemplazar dependencias reales por simuladas.
+5. Se reduce la claridad del código porque no existe una separación limpia entre validación, persistencia y notificaciones.
 
-**Escenario de calidad:** - Estímulo: Usuario intenta acceder con credenciales inválidas  
-- Sistema: Módulo de autenticación  
-- Respuesta: Acceso denegado y registro del intento  
-- Medida: 100% accesos no autorizados bloqueados  
+## Decisión
 
-**3. Fiabilidad**
+Se decidió refactorizar el módulo de usuarios separando las responsabilidades en clases independientes, aplicando los principios SOLID, especialmente SRP y DIP.
 
-**Descripción:** El sistema debe garantizar disponibilidad y consistencia de los datos.
+La decisión consiste en dividir la lógica relacionada con usuarios en los siguientes componentes:
 
-**Escenario de calidad:** - Estímulo: Registro de una solicitud de servicio  
-- Sistema: Base de datos  
-- Respuesta: Información almacenada correctamente  
-- Medida: 0% pérdida de datos, disponibilidad ≥ 99%  
+### 1. UserValidator.js
 
-**4. Usabilidad**
+Se crea el archivo:
 
-**Descripción:** El sistema debe ser intuitivo y fácil de usar.
+`src/services/UserValidator.js`
 
-**Escenario de calidad:** - Estímulo: Usuario nuevo solicita un servicio  
-- Sistema: Interfaz web  
-- Respuesta: Completa el proceso sin ayuda  
-- Medida: ≤ 3 pasos, tiempo ≤ 2 minutos  
+Este componente se encarga únicamente de validar los datos del usuario durante el registro.
 
-**5. Mantenibilidad**
+Responsabilidades principales:
 
-**Descripción:** El sistema debe permitir cambios sin afectar otros módulos.
+- Validar que el nombre sea obligatorio y tenga mínimo 3 caracteres.
+- Validar que el correo electrónico tenga un formato correcto.
+- Validar que la contraseña tenga mínimo 8 caracteres.
+- Validar que el rol pertenezca a los roles permitidos: `admin`, `tecnico` o `cliente`.
+- Retornar un resultado con `isValid` y una lista de errores.
 
-**Escenario de calidad:** - Estímulo: Modificación del módulo de facturación  
-- Sistema: Arquitectura del sistema  
-- Respuesta: Cambio sin afectar otros módulos  
-- Medida: Impacto ≤ 1 módulo adicional  
+Este componente aplica el principio SRP porque solo tiene una razón para cambiar: cuando cambien las reglas de validación de usuarios.
 
-**6. Compatibilidad**
+### 2. UserRepository.js
 
-**Descripción:** El sistema debe funcionar en diferentes navegadores.
+Se crea el archivo:
 
-**Escenario de calidad:** - Estímulo: Acceso desde distintos navegadores  
-- Sistema: Aplicación web  
-- Respuesta: Funciona correctamente  
-- Medida: Compatibilidad ≥ 95% navegadores modernos  
+`src/services/UserRepository.js`
 
-**Justificación**
-Los atributos identificados reflejan las necesidades del negocio, especialmente en:
+Este componente se encarga únicamente del acceso a datos relacionado con usuarios.
 
-- Reducción de tiempos de atención (rendimiento)
-- Protección de la información (seguridad)
-- Disponibilidad del sistema (fiabilidad)
-- Facilidad de uso para clientes (usabilidad)
-- Capacidad de evolución del sistema (mantenibilidad)
+Responsabilidades principales:
 
-Estos atributos actuarán como drivers arquitectónicos en las siguientes etapas del proyecto.
+- Guardar usuarios en la base de datos.
+- Buscar usuarios por correo electrónico.
+- Encapsular las consultas SQL relacionadas con usuarios.
+- Separar la lógica de persistencia de la lógica de negocio.
 
-**Consecuencias**
+Este componente también aplica SRP porque solo cambia si cambia la forma de acceder o guardar los datos de usuarios.
 
-**Positivas**
-- Claridad en los requisitos no funcionales
-- Base sólida para decisiones arquitectónicas
-- Facilita la validación del sistema
+Además, permite aplicar DIP porque la conexión a la base de datos se recibe desde afuera mediante el constructor. Esto evita que el repositorio cree internamente su propia conexión y permite cambiar la implementación de base de datos sin afectar directamente a las capas superiores.
 
-**Negativas**
-- Requiere mayor esfuerzo en diseño y desarrollo
-- Puede limitar decisiones técnicas futuras
+### 3. EmailService.js
 
-**Conclusión**
-La identificación de atributos de calidad permite establecer criterios claros de cómo debe comportarse el sistema. Estos atributos serán utilizados como base para la priorización (Lab 2) y la selección del patrón arquitectónico (Lab 3).
+Se crea el archivo:
+
+`src/services/EmailService.js`
+
+Este componente se encarga únicamente del envío de correos y notificaciones.
+
+Responsabilidades principales:
+
+- Enviar correos electrónicos.
+- Simular el envío de mensajes desde `notifications@greenmantenimientos.com`.
+- Enviar correos de bienvenida a usuarios nuevos.
+- Mantener separada la lógica de notificación de la lógica de usuarios.
+
+Este componente aplica SRP porque solo tiene una razón para cambiar: cuando cambie la forma de enviar correos o notificaciones.
+
+### 4. Inyección de dependencias
+
+Se decide aplicar inyección de dependencias para que las clases no creen directamente sus dependencias internas.
+
+Por ejemplo, `UserRepository` recibe la conexión de base de datos mediante el constructor:
+
+```js
+constructor(dbConnection) {
+    this.db = dbConnection;
+}
