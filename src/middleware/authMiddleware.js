@@ -1,24 +1,34 @@
 // src/middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = "green_secret_2026";
+const JWT_SECRET = process.env.JWT_SECRET || "green_secret_2026";
 
+/**
+ * Middleware para proteger rutas mediante verificación de JSON Web Tokens (JWT).
+ */
 const authMiddleware = (req, res, next) => {
-    // Obtener el token del header Authorization (formato: Bearer TOKEN) 
+    // 1. Obtener el encabezado de autorización
     const authHeader = req.headers['authorization'];
+
+    // El token viene usualmente en formato: "Bearer <TOKEN>"
     const token = authHeader && authHeader.split(' ')[1];
 
+    // Táctica de Seguridad: Denegar acceso directo si no se envía el token
     if (!token) {
-        return res.status(401).json({ message: "Acceso denegado: Token no proporcionado" });
+        return res.status(401).json({
+            success: false,
+            message: "Acceso denegado. Token de autenticación no proporcionado en los headers."
+        });
     }
 
     try {
-        // Verificar validez del token [cite: 234]
-        const verified = jwt.verify(token, SECRET_KEY);
-        req.user = verified; // Guardamos los datos del usuario en la petición
-        next(); // ¡Pasas!
-    } catch (error) {
-        res.status(403).json({ message: "Token inválido o expirado" });
-    }
-};
+        // 2. Verificar y decodificar el token con la clave secreta del sistema
+        const decoded = jwt.verify(token, JWT_SECRET);
 
-module.exports = authMiddleware;
+        // 3. Inyectar los datos del usuario autenticado en el objeto request (req)
+        // Esto permite que los controladores subsecuentes conozcan el rol e ID de quien opera.
+        req.user = decoded;
+
+        // 4. Criterio de Éxito: Dar paso al siguiente componente o controlador
+        next();
+
+    } catch (error) {
