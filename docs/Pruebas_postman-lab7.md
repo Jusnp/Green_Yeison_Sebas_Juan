@@ -1,8 +1,14 @@
-Listo. Estas son todas las pruebas de Postman desde cero, incluyendo el admin que estás usando. Tu documento pide probar login, acceso denegado y acceso concedido con token. 
-0. Verifica que el admin exista en AuthController.js
-En tu archivo:
+# PRUEBAS POSTMAN — LABORATORIO 7 JWT
+
+## Verificación inicial del usuario administrador
+
+Antes de iniciar las pruebas en Postman, verifica que en el archivo:
+
+```txt
 src/controllers/AuthController.js
-Debe existir un usuario admin parecido a este:
+
+exista un usuario administrador similar a este:
+
 const userInDB = {
   id: 101,
   nombre: "Yeison Areiza",
@@ -10,136 +16,193 @@ const userInDB = {
   passwordHash: passwordHashSimulado,
   rol: "admin"
 };
-Ese admin se prueba con estas credenciales:
+
+Las credenciales del administrador para las pruebas son:
+
 {
   "email": "admin@green.com",
   "password": "admin123"
 }
-________________________________________
 1. Levantar el servidor
-En VS Code abre la terminal y ejecuta:
+
+En Visual Studio Code abre la terminal y ejecuta:
+
 node src/server.js
-Debe salir:
+
+Resultado esperado:
+
 Servidor corriendo en http://localhost:3000
-Deja esa terminal abierta.
-También puedes abrir en navegador:
+
+La terminal debe permanecer abierta mientras realizas las pruebas.
+
+También puedes abrir en el navegador:
+
 http://localhost:3000/
-Si sale:
+
+Si aparece:
+
 API funcionando 🚀
-vas bien.
-________________________________________
-2. Prueba POSTMAN 1: Login del admin
-Esta prueba genera el token.
-En Postman crea una petición nueva:
+
+el servidor está funcionando correctamente.
+
+2. PRUEBA POSTMAN — LOGIN DEL ADMINISTRADOR
+Objetivo
+
+Generar un token JWT válido mediante autenticación exitosa.
+
+Configuración de la petición
 Método
 POST
 URL
 http://localhost:3000/api/users/login
 Body
-Ve a:
+
+Ir a:
+
 Body → raw → JSON
-Pega esto:
+
+Pegar:
+
 {
   "email": "admin@green.com",
   "password": "admin123"
 }
 Resultado esperado
-Debe salir:
+
+Debe responder:
+
 Status: 200 OK
-Y una respuesta parecida a esta:
+
+Respuesta esperada:
+
 {
   "message": "Autenticación exitosa",
   "token": "eyJhbGciOiJIUzI1NiIs..."
 }
-En tu caso el token se llama:
+Importante
+
+El token se devuelve en la propiedad:
+
 token
-Copia todo el valor largo que empieza por:
+
+Debes copiar completamente el valor largo que comienza por:
+
 eyJhbGciOiJIUzI1NiIs...
-Esa captura es la primera prueba.
-________________________________________
-3. Prueba POSTMAN 2: Ruta protegida sin token
-Esta prueba demuestra que el sistema bloquea acceso si no mandas token.
-Crea otra petición o cambia la misma.
+
+Esta captura corresponde a la primera evidencia requerida.
+
+3. PRUEBA POSTMAN — RUTA PROTEGIDA SIN TOKEN
+Objetivo
+
+Comprobar que el sistema bloquea el acceso cuando no se envía token JWT.
+
+Configuración de la petición
 Método
 GET
 URL
 http://localhost:3000/api/users/mantenimientos/historial
-Ojo: en la URL no escribas la palabra GET. Solo va la dirección.
 Authorization
-Ve a:
+
+Ir a:
+
 Authorization
-En Type selecciona:
+
+Seleccionar:
+
 No Auth
 Body
-No pongas nada en Body.
+
+No se debe enviar Body.
+
 Resultado esperado
-Debe salir:
+
+Debe responder:
+
 Status: 401 Unauthorized
-Y una respuesta como:
+
+Respuesta esperada:
+
 {
   "success": false,
   "message": "Acceso denegado. Token de autenticación no proporcionado en los headers."
 }
-Esa captura es la segunda prueba.
-________________________________________
-4. Prueba POSTMAN 3: Ruta protegida con token válido
-Esta prueba demuestra que el admin sí puede entrar usando el token.
-Usa la misma ruta protegida:
+
+Esta captura corresponde a la segunda evidencia requerida.
+
+4. PRUEBA POSTMAN — RUTA PROTEGIDA CON TOKEN VÁLIDO
+Objetivo
+
+Comprobar que el administrador autenticado puede acceder correctamente usando el token JWT.
+
+Configuración de la petición
 Método
 GET
 URL
 http://localhost:3000/api/users/mantenimientos/historial
 Authorization
-Ve a:
+
+Ir a:
+
 Authorization
-En Type selecciona:
+
+Seleccionar:
+
 Bearer Token
-En el campo Token, pega el token largo que copiaste del login.
-Importante: pega solo el token, no escribas Bearer.
-Correcto:
+
+En el campo Token pegar únicamente el token generado en el login.
+
+Correcto
 eyJhbGciOiJIUzI1NiIs...
-Incorrecto:
+Incorrecto
 Bearer eyJhbGciOiJIUzI1NiIs...
 Resultado esperado
-Debe salir:
+
+Debe responder:
+
 Status: 200 OK
-Y una respuesta parecida a esta:
+
+Respuesta esperada:
+
 {
   "success": true,
   "message": "Acceso concedido.",
   "datos": "Historial protegido procesado para el usuario con ID: 101 y Rol: admin"
 }
-Esa captura es la tercera prueba.
-________________________________________
-5. Prueba POSTMAN 4: Token inválido
-Esta prueba demuestra el error 403.
-Usa la misma ruta:
+
+Esta captura corresponde a la tercera evidencia requerida.
+
+5. PRUEBA POSTMAN — TOKEN INVÁLIDO
+Objetivo
+
+Comprobar que el sistema detecta tokens inválidos y bloquea el acceso.
+
+Configuración de la petición
 Método
 GET
 URL
 http://localhost:3000/api/users/mantenimientos/historial
 Authorization
-Selecciona:
+
+Seleccionar:
+
 Bearer Token
-Pero en el campo Token pega algo falso, por ejemplo:
+
+En el campo Token ingresar un valor falso, por ejemplo:
+
 token_falso_123
 Resultado esperado
-Debe salir:
+
+Debe responder:
+
 Status: 403 Forbidden
-Y algo parecido a:
+
+Respuesta esperada:
+
 {
   "success": false,
   "message": "Token inválido, alterado o expirado. Acceso denegado."
 }
-Esta captura también sirve como evidencia de seguridad.
-________________________________________
-Resumen de capturas que debes entregar
-Toma capturas de estas 4 pruebas:
-Prueba	Método	URL	Resultado
-Login admin	POST	/api/users/login	200 OK
-Sin token	GET	/api/users/mantenimientos/historial	401 Unauthorized
-Con token válido	GET	/api/users/mantenimientos/historial	200 OK
-Token falso	GET	/api/users/mantenimientos/historial	403 Forbidden
-Cuando termines las pruebas, si cambiaste archivos como server.js, AuthController.js o authMiddleware.js, haz otro commit y push.
+
+Esta captura también sirve como evidencia de seguridad del sistema.
 
 
