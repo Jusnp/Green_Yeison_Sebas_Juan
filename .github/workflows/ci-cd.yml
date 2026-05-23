@@ -1,1 +1,42 @@
+name: CI/CD Green Mantenimientos
 
+on:
+  push:
+    branches:
+      - main
+      - develop
+      - "feature/**"
+  pull_request:
+    branches:
+      - develop
+      - main
+
+jobs:
+  build-test-and-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Instalar dependencias
+        run: npm install
+
+      - name: Ejecutar linter si existe
+        run: npm run lint --if-present
+
+      - name: Ejecutar pruebas si existen
+        run: npm test --if-present
+
+      - name: Construir imagen Docker
+        run: docker build -t green-mantenimientos-api .
+
+      - name: Simular despliegue
+        run: |
+          echo "Despliegue simulado a Render/Railway"
+          echo "Pipeline ejecutado correctamente"
