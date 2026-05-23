@@ -12,7 +12,7 @@ const app = express();
 app.use(express.json());
 
 // RUTAS
-app.use("/users", userRoutes);
+app.use("/api/users", userRoutes);
 
 // RUTA DE PRUEBA
 app.get("/", (req, res) => {
