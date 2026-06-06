@@ -1,1 +1,31 @@
+# Issue: Validación de rendimiento de la aplicación y base de datos mediante prueba de carga
 
+## Descripción
+Se ejecutó una prueba de rendimiento sobre el servicio con el objetivo de validar la capacidad de respuesta de la aplicación, la interacción con la base de datos y la correcta actualización de la interfaz de usuario.
+
+## Resultados obtenidos
+
+- Se realizaron **30.000 solicitudes HTTP** durante la ejecución de la prueba.
+- La aplicación consultó correctamente la **base de datos**, retornando la información en formato **JSON** según lo esperado.
+- La **interfaz se recargó y actualizó correctamente** con los datos obtenidos desde el backend.
+- Se alcanzó una tasa de éxito del **97,67 %** (**29.302 solicitudes exitosas** de 30.000).
+- El tiempo promedio de respuesta fue de aproximadamente **1,73 ms**, manteniéndose dentro de los parámetros esperados de rendimiento.
+- La prueba se ejecutó con **1.000 usuarios virtuales concurrentes (VUs)** durante **30 segundos**.
+- No se evidenciaron bloqueos, caídas del servicio ni problemas funcionales durante la ejecución.
+
+## Evidencia
+
+### Métricas principales
+
+| Métrica | Resultado |
+|----------|------------|
+| Solicitudes totales | 30.000 |
+| Solicitudes exitosas | 29.302 (97,67 %) |
+| Solicitudes fallidas | 698 (2,32 %) |
+| Tiempo promedio de respuesta | 1,73 ms |
+| Usuarios virtuales (VUs) | 1.000 |
+| Duración de la prueba | 30 s |
+
+## Conclusión
+
+La aplicación cumplió satisfactoriamente con los requisitos de rendimiento establecidos. Se verificó que la base de datos responde correctamente, que el servicio retorna la información en formato JSON y que la interfaz consume, procesa y muestra los datos sin inconvenientes, manteniendo estabilidad y disponibilidad bajo carga concurrente.
