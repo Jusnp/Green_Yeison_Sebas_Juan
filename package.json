@@ -1,0 +1,16 @@
+{
+  "name": "green-mantenimientos-api",
+  "version": "1.0.0",
+  "description": "API de Green Mantenimientos con JWT, Docker y CI/CD",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "echo \"No tests configured yet\" && exit 0",
+    "lint": "echo \"No linter configured yet\" && exit 0"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
